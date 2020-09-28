@@ -1,0 +1,22 @@
+* Installation of package.json
+    - npm init -y
+
+* Installation of Express js
+    - npm install express
+
+* Create index.js on your folder
+
+* Export express on your index.js file
+ - const express = require('express');
+ - const app = express();
+
+* Install npm install -d nodemon
+ - automatic start
+
+* Change package.json script
+    "scripts": {
+        "start": "node index",
+        "dev": "nodemon index"
+    },
+
+* middleware = bridge [ required ]
