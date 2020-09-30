@@ -37,16 +37,37 @@ app.use(
 // if the desired port is not available then will generate available port
 const PORT = process.env.PORT || 5000;
 
+// let allowCrossDomain = function (req, res, next) {
+//     res.header('Access-Control-Allow-Origin', "*");
+//     res.header('Access-Control-Allow-Headers', "*");
+//     next();
+// }
+// app.use(allowCrossDomain);
+
+// enable CORS
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', '*');
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept'
+    );
+    next();
+});
+
 // get all employee
 app.get('/api/employee/all', (req, res) => {
-    connection.query('SELECT * FROM userdata', (err, rows, fields) => {
-        if (err) throw err;
-        res.json(rows);
-    });
+    connection.query(
+        'SELECT * FROM userdata ORDER BY id DESC',
+        (err, rows, fields) => {
+            if (err) throw err;
+            res.json(rows);
+        }
+    );
 });
 
 // get certain employee
-app.get('/api/members/:id', (req, res) => {
+app.get('/api/employee/:id', (req, res) => {
     var id = req.params.id;
 
     connection.query(
@@ -57,7 +78,9 @@ app.get('/api/members/:id', (req, res) => {
             if (rows.length > 0) {
                 res.json(rows);
             } else {
-                res.status(400).json({ msg: `No user with an id of ${id}` });
+                res.status(400).json({
+                    msg: `No user with an id of ${id}`,
+                });
             }
         }
     );
@@ -72,6 +95,8 @@ app.post('/api/employee', (req, res) => {
     // OR
 
     const { fname, lname, email, gender } = req.body;
+
+    console.log(req.body);
 
     connection.query(
         `INSERT INTO userdata (first_name, last_name, email, gender) VALUES ('${fname}', '${lname}', '${email}', '${gender}')`,
